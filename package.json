@@ -1,8 +1,11 @@
 {
   "name": "@wavepoint/gatsby-remark-onlinesales",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Adds support for onlinesales relative images path",
   "main": "index.js",
+  "dependencies": {
+    "fs-extra": "11.1.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
