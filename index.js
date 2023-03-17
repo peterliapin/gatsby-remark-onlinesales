@@ -13,7 +13,7 @@ module.exports.default = async ({
     cache, 
 }, pluginOptions) => {
     const processImages = async(node) =>{
-      const imageMatch = node.url.match('/api/images/(.*)/(.*)');
+      const imageMatch = node.url.match('/api/images/(.*)/(.*)') || node.src.match('/api/images/(.*)/(.*)');
       if (!imageMatch) {
           return;
       }
