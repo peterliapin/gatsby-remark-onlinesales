@@ -13,7 +13,13 @@ module.exports.default = async ({
     cache, 
 }, pluginOptions) => {
     const processImages = async(node) =>{
-      const imageMatch = node.url.match('/api/images/(.*)/(.*)') || node.src.match('/api/images/(.*)/(.*)');
+      let imageMatch;
+      if (node.url){
+        imageMatch = node.url.match('/api/images/(.*)/(.*)');
+      }else if (node.attributes.src){
+        imageMatch = node.attributes.src.match('/api/images/(.*)/(.*)');
+        console.log(imageMatch);
+      }
       if (!imageMatch) {
           return;
       }
@@ -21,7 +27,7 @@ module.exports.default = async ({
       const fileName = imageMatch[2];
       const nodeId = createNodeId(`RemoteImage-${scope}-${fileName}`);
       const fileNode = await createRemoteFileNode({
-          url: `${pluginOptions.url}${node.url}`,
+          url: `${pluginOptions.url}${imageMatch[0]}`,
           parentNodeId: nodeId,
           getCache,
           createNode,
@@ -41,12 +47,17 @@ module.exports.default = async ({
         });
         const readyPath = `/static/${scope}/${fileName}`;
         console.log(`Created ${fileName} file at ${readyPath}`);
-        node.url = readyPath;
+        if (node.url){
+          node.url = readyPath;
+        }else if (node.attributes.src) {
+          node.attributes.src = readyPath;
+          node.data.hProperties.src = readyPath;
+        }
       }
     const { createNode } = actions
     const imageNodes = [];
     visit(markdownAST, (node) => {
-        if (node.type !== 'image') {
+        if (node.type !== 'image' && node.type !== 'leafDirective' && node.name !== 'img') {
             return;
         }
         imageNodes.push(node);
