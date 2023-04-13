@@ -15,9 +15,9 @@ module.exports.default = async ({
     const processImages = async(node) =>{
       let imageMatch;
       if (node.url){
-        imageMatch = node.url.match('/api/images/(.*)/(.*)');
+        imageMatch = node.url.match('/api/media/(.*)/(.*)');
       }else if (node.attributes.src){
-        imageMatch = node.attributes.src.match('/api/images/(.*)/(.*)');
+        imageMatch = node.attributes.src.match('/api/media/(.*)/(.*)');
         console.log(imageMatch);
       }
       if (!imageMatch) {
